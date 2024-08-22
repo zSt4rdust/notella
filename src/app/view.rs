@@ -7,6 +7,7 @@ impl App {
         &'a self,
         state: &'a LoadedState,
     ) -> Element<<App as iced::Application>::Message> {
-        return state.grid.view().map(move |msg| AppMessage::Grid(msg));
+        let grid = state.grid.view();
+        return grid;
     }
 }

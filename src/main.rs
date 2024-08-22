@@ -2,8 +2,8 @@ use app::App;
 use iced::{window, Application, Settings, Size};
 
 pub mod app;
+pub mod cards;
 pub mod elements;
-pub mod nodes;
 pub mod utils;
 
 fn main() -> iced::Result {

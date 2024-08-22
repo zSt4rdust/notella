@@ -2,33 +2,50 @@ pub mod grid;
 pub mod update;
 pub mod view;
 
-use iced::{event, executor, Application, Command, Element, Event, Size, Theme};
+use std::vec;
+
+use iced::{event, executor, Application, Command, Element, Event, Theme, Vector};
+
+use crate::cards::{text::TextCard, Card};
 
 pub struct App {
     pub state: AppState,
 }
 
 pub enum AppState {
-    Loaded(LoadedState),
+    Board(LoadedState),
 }
 
 pub struct LoadedState {
-    pub input_value: String,
-    pub window_size: Size<u32>,
     pub grid: grid::Grid,
+    pub cards: Vec<Card>,
 }
 
 impl Default for LoadedState {
     fn default() -> Self {
         Self {
-            input_value: String::new(),
-            window_size: Size::new(0, 0),
             grid: grid::Grid {
                 pixels_per_unit: 25.0,
                 min_zoom: 0.5,
                 max_zoom: 4.0,
                 zoom_sensitivity: 0.05,
             },
+            cards: vec![
+                Card {
+                    position: Vector::new(10.0, 5.0),
+                    title: None,
+                    kind: Box::new(TextCard {
+                        text: "Hello, World! 1".to_owned(),
+                    }),
+                },
+                Card {
+                    position: Vector::new(5.0, 10.0),
+                    title: None,
+                    kind: Box::new(TextCard {
+                        text: "Hello, World! 2".to_owned(),
+                    }),
+                },
+            ],
         }
     }
 }
@@ -36,7 +53,6 @@ impl Default for LoadedState {
 #[derive(Debug, Clone)]
 pub enum AppMessage {
     EventOccurred(Event),
-    Grid(grid::GridMessage),
 }
 
 impl Application for App {
@@ -48,7 +64,7 @@ impl Application for App {
     fn new(_flags: Self::Flags) -> (Self, Command<Self::Message>) {
         (
             Self {
-                state: AppState::Loaded(LoadedState::default()),
+                state: AppState::Board(LoadedState::default()),
             },
             Command::none(),
         )
@@ -60,13 +76,13 @@ impl Application for App {
 
     fn update(&mut self, message: Self::Message) -> Command<Self::Message> {
         match &mut self.state {
-            AppState::Loaded(state) => Self::loaded_update(message, state),
+            AppState::Board(state) => Self::loaded_update(message, state),
         }
     }
 
     fn view(&self) -> Element<Self::Message> {
         match &self.state {
-            AppState::Loaded(state) => self.loaded_view(state),
+            AppState::Board(state) => self.loaded_view(state),
         }
     }
 

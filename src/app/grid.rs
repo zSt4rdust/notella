@@ -9,8 +9,7 @@ use iced::{
 
 use crate::utils::{PointExt, Record};
 
-#[derive(Debug, Clone)]
-pub enum GridMessage {}
+use super::AppMessage;
 
 pub struct Grid {
     pub pixels_per_unit: f32,
@@ -40,7 +39,7 @@ impl Default for GridState {
 }
 
 impl Grid {
-    pub fn view(&self) -> Element<GridMessage> {
+    pub fn view(&self) -> Element<AppMessage> {
         Canvas::new(self)
             .width(Length::Fill)
             .height(Length::Fill)
@@ -48,7 +47,7 @@ impl Grid {
     }
 }
 
-impl canvas::Program<GridMessage> for Grid {
+impl canvas::Program<AppMessage> for Grid {
     type State = GridState;
 
     fn update(
@@ -57,7 +56,7 @@ impl canvas::Program<GridMessage> for Grid {
         event: canvas::Event,
         bounds: iced::Rectangle,
         _cursor: mouse::Cursor,
-    ) -> (canvas::event::Status, Option<GridMessage>) {
+    ) -> (canvas::event::Status, Option<AppMessage>) {
         match event {
             canvas::Event::Mouse(mouse_event) => match mouse_event {
                 mouse::Event::WheelScrolled { delta } => match delta {
